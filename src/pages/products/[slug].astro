@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../data/site';
+
+export async function getStaticPaths() {
+  const products = await Astro.glob('../../content/products/*.md');
+  return products.map((product) => ({
+    params: { slug: product.frontmatter.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = product;
+const fm = product.frontmatter;
+---
+
+<BaseLayout title={fm.title} description={fm.description}>
+  <section class="section">
+    <div class="container">
+      <p style="margin-bottom:1.5rem;">
+        <a href={withBase('/products/')}>← All products</a>
+      </p>
+
+      <div class="detail">
+        <div class="detail-thumb" aria-hidden="true">{fm.icon ?? '◆'}</div>
+
+        <div>
+          <p class="eyebrow">{fm.tags?.join(' · ')}</p>
+          <h1>{fm.title}</h1>
+          <p class="text-muted">{fm.description}</p>
+
+          <table class="spec-table">
+            {fm.price && (
+              <tr><th>Price</th><td>{fm.price}</td></tr>
+            )}
+            {fm.sku && (
+              <tr><th>SKU</th><td><code>{fm.sku}</code></td></tr>
+            )}
+            {fm.specs &&
+              Object.entries(fm.specs).map(([key, value]) => (
+                <tr><th>{key}</th><td>{value}</td></tr>
+              ))
+            }
+          </table>
+
+          <div class="hero-actions" style="justify-content:flex-start;">
+            <a class="btn btn--primary" href={withBase('/contact/')}>Enquire / order</a>
+            <a class="btn btn--ghost" href={withBase('/products/')}>Back to catalogue</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-top:2.5rem;">
+        <h2>Details</h2>
+        <Content />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

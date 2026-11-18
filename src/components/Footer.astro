@@ -1,0 +1,48 @@
+---
+import { site, withBase } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a class="brand" href={withBase('/')}>
+          <span class="brand-mark">◆</span>
+          <span>{site.name}</span>
+        </a>
+        <p class="text-muted" style="margin-top: 0.75rem; max-width: 34ch;">
+          {site.description}
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          {
+            site.nav.map((item) => (
+              <li><a href={withBase(item.href)}>{item.label}</a></li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>
+          <li><a href={`tel:${site.contact.phone.replace(/[^+\d]/g, '')}`}>{site.contact.phone}</a></li>
+          <li class="text-muted">{site.contact.address}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {year} {site.name}. All rights reserved.</span>
+      <span>
+        Built with <a href="https://astro.build" rel="noopener">Astro</a> · search by{' '}
+        <a href="https://pagefind.app" rel="noopener">Pagefind</a>
+      </span>
+    </div>
+  </div>
+</footer>

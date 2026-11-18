@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Search from '../components/Search.astro';
+import { site, withBase } from '../data/site';
+
+const featured = (await Astro.glob('../content/products/*.md'))
+  .filter((p) => p.frontmatter.featured)
+  .sort((a, b) => (a.frontmatter.order ?? 0) - (b.frontmatter.order ?? 0))
+  .slice(0, 3);
+
+const posts = (await Astro.glob('../content/blog/*.md'))
+  .filter((p) => !p.frontmatter.draft)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime(),
+  )
+  .slice(0, 2);
+
+const features = [
+  { icon: '⚡', title: 'Static & fast', text: 'Pre-rendered HTML served from a CDN — no server to run, patch, or pay for.' },
+  { icon: '🔍', title: 'Built-in search', text: 'Pagefind indexes the whole site at build time, so search works with zero backend.' },
+  { icon: '🛠️', title: 'Headless content', text: 'Content lives in plain Markdown files you can edit in Git, or wire up any headless CMS.' },
+];
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container">
+      <h1>{site.tagline}</h1>
+      <p class="lead">{site.description}</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href={withBase('/products/')}>Browse the catalogue</a>
+        <a class="btn btn--ghost" href={withBase('/about/')}>Learn more</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0.5rem;">
+    <div class="container">
+      <Search />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--features">
+        {
+          features.map((f) => (
+            <div class="card">
+              <div class="feature-icon" aria-hidden="true">{f.icon}</div>
+              <h3>{f.title}</h3>
+              <p class="text-muted" style="margin:0;">{f.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tinted">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Featured</p>
+        <h2>In the catalogue</h2>
+      </div>
+      <div class="grid grid--products">
+        {
+          featured.map((p) => (
+            <ProductCard
+              slug={p.frontmatter.slug}
+              title={p.frontmatter.title}
+              description={p.frontmatter.description}
+              price={p.frontmatter.price}
+              icon={p.frontmatter.icon}
+              tags={p.frontmatter.tags}
+            />
+          ))
+        }
+      </div>
+      <p style="margin-top:1.5rem;">
+        <a href={withBase('/products/')}>View all products →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Journal</p>
+        <h2>Latest from the blog</h2>
+      </div>
+      <div class="post-list">
+        {
+          posts.map((post) => (
+            <article class="card post-item">
+              <time datetime={post.frontmatter.pubDate}>{post.frontmatter.pubDate}</time>
+              <h3><a href={withBase(`/blog/${post.frontmatter.slug}/`)}>{post.frontmatter.title}</a></h3>
+              <p class="text-muted" style="margin:0;">{post.frontmatter.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="cta-band">
+        <h2>Have a project in mind?</h2>
+        <p style="max-width:44ch; margin:0 auto 1.5rem;">Get in touch — we usually reply within one business day.</p>
+        <a class="btn btn--ghost" href={withBase('/contact/')}>Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

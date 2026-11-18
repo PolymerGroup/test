@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Search from '../../components/Search.astro';
+
+const products = (await Astro.glob('../../content/products/*.md')).sort(
+  (a, b) => (a.frontmatter.order ?? 0) - (b.frontmatter.order ?? 0),
+);
+---
+
+<BaseLayout title="Products">
+  <section class="section">
+    <div class="container">
+      <div class="section-head text-center">
+        <p class="eyebrow">Catalogue</p>
+        <h1>All products</h1>
+        <p class="text-muted">{products.length} items — use search to filter instantly.</p>
+      </div>
+
+      <Search />
+
+      <div class="grid grid--products">
+        {
+          products.map((p) => (
+            <ProductCard
+              slug={p.frontmatter.slug}
+              title={p.frontmatter.title}
+              description={p.frontmatter.description}
+              price={p.frontmatter.price}
+              icon={p.frontmatter.icon}
+              tags={p.frontmatter.tags}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

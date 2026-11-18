@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../data/site';
+
+const faqs = [
+  {
+    q: 'How do I order?',
+    a: 'Use the contact form or email us directly and we will confirm availability and delivery.',
+  },
+  {
+    q: 'Do you ship internationally?',
+    a: 'Yes. Shipping costs and times are confirmed at checkout — replace this answer with your own policy.',
+  },
+  {
+    q: 'What is your return policy?',
+    a: 'Unused items in their original packaging can be returned within 30 days. Replace with your real policy.',
+  },
+  {
+    q: 'Can I customise an order?',
+    a: 'Often yes — get in touch with the details and we will let you know what is possible.',
+  },
+];
+---
+
+<BaseLayout title="FAQ">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Help</p>
+        <h1>Frequently asked questions</h1>
+      </div>
+
+      <div class="faq" style="max-width: 46rem;">
+        {
+          faqs.map((item) => (
+            <details>
+              <summary>{item.q}</summary>
+              <p class="text-muted">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <p style="margin-top:2rem;">
+        Still stuck? <a href={withBase('/contact/')}>Contact us →</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

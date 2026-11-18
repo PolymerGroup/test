@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site, withBase } from '../data/site';
+---
+
+<BaseLayout title="About">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">About</p>
+        <h1>Who we are</h1>
+      </div>
+
+      <div class="prose">
+        <p>
+          <strong>{site.name}</strong> is a small, independent team. We build this
+          site as a demonstration of what a modern, headless static website can be:
+          fast, secure and cheap to run, with no server to maintain.
+        </p>
+        <p>
+          Replace this copy with your own story — who you are, what you make, and why
+          you do it. Every paragraph here is plain Markdown or Astro, so editing it is
+          as simple as changing a text file.
+        </p>
+
+        <h2>Our approach</h2>
+        <ul>
+          <li><strong>Static first.</strong> Pages are generated once and served from a CDN.</li>
+          <li><strong>Headless.</strong> Content is decoupled from the presentation layer.</li>
+          <li><strong>Transparent.</strong> The whole site is a Git repository you own.</li>
+        </ul>
+
+        <h2>Where to find us</h2>
+        <p>
+          {site.contact.address}<br />
+          Email: <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a><br />
+          Phone: <a href={`tel:${site.contact.phone.replace(/[^+\d]/g, '')}`}>{site.contact.phone}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tinted">
+    <div class="container">
+      <div class="cta-band">
+        <h2>See what we make</h2>
+        <p style="max-width:44ch; margin:0 auto 1.5rem;">Browse the full catalogue or get in touch.</p>
+        <a class="btn btn--ghost" href={withBase('/products/')}>View products</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import { site, withBase } from '../data/site';
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => {
+  if (href === '/') return currentPath === withBase('/') || currentPath === '/';
+  return currentPath === withBase(href) || currentPath === withBase(href) + '/';
+};
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={withBase('/')}>
+      <span class="brand-mark">◆</span>
+      <span>{site.name}</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary" data-nav>
+      {
+        site.nav.map((item) => (
+          <a
+            class:list={['nav-link', { active: isActive(item.href) }]}
+            href={withBase(item.href)}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" data-nav-toggle>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector('[data-nav-toggle]');
+  const nav = document.querySelector('[data-nav]');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open') ?? false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

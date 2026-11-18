@@ -1,0 +1,36 @@
+---
+import { withBase } from '../data/site';
+
+interface Props {
+  slug: string;
+  title: string;
+  description?: string;
+  price?: string;
+  icon?: string;
+  tags?: string[];
+}
+
+const { slug, title, description, price, icon = '◆', tags = [] } = Astro.props;
+const href = withBase(`/products/${slug}/`);
+---
+
+<article class="card product-card">
+  <div class="product-thumb" aria-hidden="true">{icon}</div>
+  <div class="product-body">
+    <h3><a href={href}>{title}</a></h3>
+    {description && <p class="product-desc">{description}</p>}
+
+    {tags.length > 0 && (
+      <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.4rem;">
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    )}
+
+    <div class="product-meta">
+      {price ? <span class="price">{price}</span> : <span />}
+      <a class="btn btn--ghost" href={href} style="padding:0.4rem 0.8rem; font-size:0.85rem;">
+        View →
+      </a>
+    </div>
+  </div>
+</article>
